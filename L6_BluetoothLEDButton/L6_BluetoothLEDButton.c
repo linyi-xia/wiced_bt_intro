@@ -100,7 +100,9 @@ uint8_t l5_bluetoothled_l5service_red_user_description[] = {'R','E','D',' ','L',
 
 uint8_t l5_bluetoothled_l5service_button[]                  = {0x01};
 uint8_t l5_bluetoothled_l5service_button_user_description[] = "Button Value";
-uint8_t l5_bluetoothled_l5service_button_cccd[]      = {0x00,0x00};
+//uint8_t l5_bluetoothled_l5service_button_cccd[]      = {0x00,0x00};
+//This contains the initial value of the buttons, need to be changed to 0x01 for the board to work.
+uint8_t l5_bluetoothled_l5service_button_cccd[]      = {0x01,0x01};
 
 /*******************************************************************
  * GATT Lookup Table
@@ -200,8 +202,9 @@ void l5_bluetoothled_app_init(void)
     wiced_bt_start_advertisements(BTM_BLE_ADVERT_UNDIRECTED_HIGH, 0, NULL);
 
     wiced_hal_gpio_register_pin_for_interrupt( WICED_GPIO_PIN_BUTTON_1, buttonISR, NULL );
-    wiced_hal_gpio_configure_pin( WICED_GPIO_PIN_BUTTON_1, ( GPIO_INPUT_ENABLE | GPIO_PULL_UP | GPIO_EN_INT_BOTH_EDGE ), GPIO_PIN_OUTPUT_HIGH );
-
+    //wiced_hal_gpio_configure_pin( WICED_GPIO_PIN_BUTTON_1, ( GPIO_INPUT_ENABLE | GPIO_PULL_UP | GPIO_EN_INT_BOTH_EDGE ), GPIO_PIN_OUTPUT_HIGH );
+    //Switch SW3 is tided to active high, therefore the pin needs to be pulled low by default. 
+    wiced_hal_gpio_configure_pin( WICED_GPIO_PIN_BUTTON_1, ( GPIO_INPUT_ENABLE | GPIO_PULL_DOWN | GPIO_EN_INT_BOTH_EDGE ), GPIO_PIN_OUTPUT_LOW );
 }
 
 /* Set Advertisement Data */
